@@ -120,26 +120,38 @@ class ValidatorViewController: UIViewController, UITextFieldDelegate {
             }
         case passwordConfirmTextField:
             if let passwordConfirm = passwordConfirmTextField.text {
-                if passwordConfirmTextField.text == passwordConfirm {
+                if passwordTextField.text == passwordConfirm {
                     validChecks+=1
                     passwordConfirmTextField.backgroundColor = UIColor.clearColor()
                 } else {
                     shakeItOff(passwordConfirmTextField)
                 }
             }
+            
         default:
             print("went through all cases")
         } // end of switch statement
         
         if validChecks == 5 {
-            submitButton.enabled = true
+            submitButtonAnimation(self.submitButton)
         }
+        
+    
     }//end of IBAction
     
     
+    func submitButtonAnimation(submitButtonTapped: UIButton) {
+        self.submitButton.enabled = true
+        UIButton.animateWithDuration(1.0) {
+            //animation here 
+            self.submitButton.bottomAnchor.constraintEqualToAnchor(self.view.bottomAnchor).active = false
+            self.submitButton.topAnchor.constraintEqualToAnchor(self.viewWithAllTextFields.bottomAnchor, constant: 10).active = true
+            self.view.layoutIfNeeded()
+        }
+    }
+    
     @IBAction func submitButtonTapped(sender: UIButton){
-        //enable the button
-        //animate it to show underneath the textfields
+        print("Submit button tapped")
     }
     
     func checkEmail(emailText: String) -> Bool {
