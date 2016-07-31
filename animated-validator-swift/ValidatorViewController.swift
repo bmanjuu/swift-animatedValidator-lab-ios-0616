@@ -70,6 +70,7 @@ class ValidatorViewController: UIViewController, UITextFieldDelegate {
         self.viewWithAllTextFields.widthAnchor.constraintEqualToAnchor(self.view.widthAnchor).active = true
         self.viewWithAllTextFields.leftAnchor.constraintEqualToAnchor(self.view.leftAnchor).active = true
         
+        
     }
     
     @IBAction func signupFields(sender: UITextField) {
@@ -91,6 +92,7 @@ class ValidatorViewController: UIViewController, UITextFieldDelegate {
                     shakeItOff(emailTextField)
                 }
             }
+            submitButtonAnimation(validChecks)
         case emailConfirmationTextField:
             if let confirmEmail = emailConfirmationTextField.text {
                 if emailTextField.text == confirmEmail{
@@ -100,6 +102,7 @@ class ValidatorViewController: UIViewController, UITextFieldDelegate {
                     shakeItOff(emailConfirmationTextField)
                 }
             }
+            submitButtonAnimation(validChecks)
         case phoneTextField:
             if let phone = phoneTextField.text {
                 if phone.characters.count >= 7 && Int(phone) != nil {
@@ -109,6 +112,7 @@ class ValidatorViewController: UIViewController, UITextFieldDelegate {
                     shakeItOff(phoneTextField)
                 }
             }
+            submitButtonAnimation(validChecks)
         case passwordTextField:
             if let password = passwordTextField.text {
                 if password.characters.count >= 6 {
@@ -118,6 +122,7 @@ class ValidatorViewController: UIViewController, UITextFieldDelegate {
                     shakeItOff(passwordTextField)
                 }
             }
+            submitButtonAnimation(validChecks)
         case passwordConfirmTextField:
             if let passwordConfirm = passwordConfirmTextField.text {
                 if passwordTextField.text == passwordConfirm {
@@ -127,26 +132,24 @@ class ValidatorViewController: UIViewController, UITextFieldDelegate {
                     shakeItOff(passwordConfirmTextField)
                 }
             }
-            
+            submitButtonAnimation(validChecks)
         default:
             print("went through all cases")
         } // end of switch statement
-        
-        if validChecks == 5 {
-            submitButtonAnimation(self.submitButton)
-        }
-        
-    
     }//end of IBAction
     
     
-    func submitButtonAnimation(submitButtonTapped: UIButton) {
-        self.submitButton.enabled = true
-        UIButton.animateWithDuration(1.0) {
-            //animation here 
-            self.submitButton.bottomAnchor.constraintEqualToAnchor(self.view.bottomAnchor).active = false
-            self.submitButton.topAnchor.constraintEqualToAnchor(self.viewWithAllTextFields.bottomAnchor, constant: 10).active = true
-            self.view.layoutIfNeeded()
+    func submitButtonAnimation(validatedFields: Int) {
+        if validatedFields == 5 {
+            self.submitButton.enabled = true
+            UIButton.animateWithDuration(1.0, delay: 0.0, options: [], animations: {
+                self.submitButton.bottomAnchor.constraintEqualToAnchor(self.view.bottomAnchor).active = false
+                self.submitButton.topAnchor.constraintEqualToAnchor(self.viewWithAllTextFields.bottomAnchor).active = true
+                self.view.layoutIfNeeded()
+            }) { (completed) in
+                self.submitButton.topAnchor.constraintEqualToAnchor(self.viewWithAllTextFields.bottomAnchor).active = true
+                self.view.layoutIfNeeded()
+            }
         }
     }
     
