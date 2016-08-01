@@ -20,6 +20,8 @@ class ValidatorViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var viewWithAllTextFields: UIStackView!
     
     var validChecks : Int = 0
+    var bottomConstraint : NSLayoutConstraint?
+    var topConstraint: NSLayoutConstraint?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -63,7 +65,10 @@ class ValidatorViewController: UIViewController, UITextFieldDelegate {
         
         
         self.submitButton.centerXAnchor.constraintEqualToAnchor(self.viewWithAllTextFields.centerXAnchor).active = true
-        self.submitButton.bottomAnchor.constraintEqualToAnchor(self.view.bottomAnchor).active = true
+        self.bottomConstraint = self.submitButton.bottomAnchor.constraintEqualToAnchor(self.view.bottomAnchor)
+        self.bottomConstraint?.active = true
+        
+        
         
     self.viewWithAllTextFields.centerXAnchor.constraintEqualToAnchor(self.view.centerXAnchor).active = true
     self.viewWithAllTextFields.centerYAnchor.constraintEqualToAnchor(self.view.centerYAnchor).active = true
@@ -141,13 +146,16 @@ class ValidatorViewController: UIViewController, UITextFieldDelegate {
     
     func submitButtonAnimation(validatedFields: Int) {
         if validatedFields == 5 {
+            
             self.submitButton.enabled = true
+            self.topConstraint = self.submitButton.topAnchor.constraintEqualToAnchor(self.viewWithAllTextFields.bottomAnchor)
+            
             UIButton.animateWithDuration(1.0, delay: 0.0, options: [], animations: {
-                self.submitButton.bottomAnchor.constraintEqualToAnchor(self.view.bottomAnchor).active = false
-                self.submitButton.topAnchor.constraintEqualToAnchor(self.viewWithAllTextFields.bottomAnchor).active = true
+                self.bottomConstraint?.active = false
+                self.topConstraint?.active = true
                 self.view.layoutIfNeeded()
+                
             }) { (completed) in
-                self.submitButton.topAnchor.constraintEqualToAnchor(self.viewWithAllTextFields.bottomAnchor).active = true
                 self.view.layoutIfNeeded()
             }
         }
